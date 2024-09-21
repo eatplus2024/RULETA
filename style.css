@@ -1,69 +1,58 @@
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #6c98fe;
-  margin: 0;
-  padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
 }
 
-h1 {
-  color: #333;
+.main-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 20px;
 }
 
 input, button {
-  padding: 10px;
-  margin: 10px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 2px solid #333;
+    font-size: 16px;
+}
+
+button {
+    background-color: green;
+    color: white;
+}
+
+.details-box {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
 }
 
 ul {
-  list-style: none;
-  padding: 0;
+    list-style-type: none;
+    padding: 0;
 }
 
-li {
-  background-color: #fff;
-  margin: 5px;
-  padding: 10px;
-  border: 1px solid #ccc;
+ul li {
+    padding: 10px;
+    background-color: #eee;
+    margin: 5px 0;
+    cursor: pointer;
 }
 
-#digitalBoard {
-  margin-top: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  width: 50%; /* La mitad del ancho de la pantalla */
-  height: 50%; /* La mitad de la altura de la pantalla */
-  margin: auto;
-  position: relative;
-  color: #333;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border-radius: 5px;
-  min-height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease-in-out;
+ul li:hover {
+    background-color: #ccc;
 }
-
-#digitalBoard.winner {
-  background-color: #FFD700; /* Color dorado */
-  color: #fff;
-  font-size: 24px;
-  width: 50%; /* La mitad del ancho de la pantalla */
-  height: 50%; /* La mitad de la altura de la pantalla */
-  margin: auto;
-  position: relative;
-}
-
-#digitalBoard.winner::after {
-  content: "🎉🎉🎁🎁";
-  position: absolute;
-  font-size: 30px;
-  top: -30px;
-  left: calc(50% - 45px);
-  animation: sparkle 1s infinite alternate;
-}
-
-@keyframes sparkle {
-  from {
