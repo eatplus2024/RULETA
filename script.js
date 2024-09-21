@@ -1,48 +1,46 @@
-let participants = [];
+let isAvailable = true;
 
-function addParticipant() {
-    const name = document.getElementById('name').value;
-    if (name) {
-        participants.push(name);
-        updateParticipantsList();
-        document.getElementById('name').value = '';
+// Función para cambiar el estado del taxista (disponible o no disponible)
+function toggleStatus() {
+    isAvailable = !isAvailable;
+    const statusButton = document.getElementById('taxiStatusButton');
+    if (isAvailable) {
+        statusButton.innerText = 'Disponible';
+        statusButton.style.backgroundColor = 'green';
+        // Aquí deberías enviar al backend que el taxista está disponible
     } else {
-        alert("Por favor, ingresa un nombre.");
+        statusButton.innerText = 'No Disponible';
+        statusButton.style.backgroundColor = 'red';
+        // Aquí deberías enviar al backend que el taxista no está disponible
     }
 }
 
-function updateParticipantsList() {
-    const list = document.getElementById('participantsList');
-    list.innerHTML = '';
-    participants.forEach(participant => {
-        const li = document.createElement('li');
-        li.textContent = participant;
-        list.appendChild(li);
+// Simulación de pedidos de taxis (esto será gestionado por el backend)
+const orders = [
+    { destination: "Parque Nacua", orderCode: "ABC123", arrivalTime: "5 minutos" },
+    { destination: "Calle 33", orderCode: "XYZ987", arrivalTime: "7 minutos" }
+];
+
+// Función para recibir pedidos (esto sería mediante WebSockets o Firebase en producción)
+function loadOrders() {
+    const ordersList = document.getElementById('ordersList');
+    ordersList.innerHTML = ''; // Limpiar lista
+    orders.forEach(order => {
+        const listItem = document.createElement('li');
+        listItem.innerText = `Destino: ${order.destination} | Código: ${order.orderCode}`;
+        listItem.onclick = () => acceptOrder(order);
+        ordersList.appendChild(listItem);
     });
 }
 
-function pickWinner() {
-    if (participants.length === 0) {
-        alert("No hay participantes para el sorteo.");
-        return;
-    }
+// Función para aceptar un pedido
+function acceptOrder(order) {
+    document.getElementById('destination').innerText = order.destination;
+    document.getElementById('orderCode').innerText = order.orderCode;
+    document.getElementById('arrivalTime').innerText = order.arrivalTime;
 
-    const digitalBoard = document.getElementById('digitalBoard');
-    let currentIndex = 0;
-    const speed = 100; // Velocidad de cambio de nombre en milisegundos
-    const duration = 5000; // Duración total del efecto en milisegundos
-
-    digitalBoard.classList.remove('winner');
-
-    const interval = setInterval(() => {
-        digitalBoard.textContent = participants[currentIndex];
-        currentIndex = (currentIndex + 1) % participants.length;
-    }, speed);
-
-    setTimeout(() => {
-        clearInterval(interval);
-        const winnerIndex = Math.floor(Math.random() * participants.length);
-        digitalBoard.textContent = `¡El ganador es: ${participants[winnerIndex]}!`;
-        digitalBoard.classList.add('winner');
-    }, duration);
+    // Aquí deberías notificar al backend que el taxista ha aceptado el pedido
 }
+
+// Simular la carga de pedidos después de un tiempo (en producción sería mediante WebSockets o Firebase)
+setTimeout(loadOrders, 2000);
