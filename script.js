@@ -1,80 +1,123 @@
-const premios = [
-    { texto: "20,000 pesos", valor: 20000 },
-    { texto: "10,000 pesos", valor: 10000 },
-    { texto: "5,000 pesos", valor: 5000 },
-    { texto: "2,000 pesos", valor: 2000 },
-    { texto: "1,000 pesos", valor: 1000 },
-    { texto: "Vuelve mañana", valor: 0 }
-];
-
-let fondoMensual = 100000;
-let ganadores = JSON.parse(localStorage.getItem('ganadores')) || [];
-
-const ruletaCanvas = document.getElementById("ruleta");
-const ctx = ruletaCanvas.getContext("2d");
-const girarBtn = document.getElementById("girarBtn");
-const ganadoresList = document.getElementById("ganadoresList");
-
-// Dibujar la ruleta
-function dibujarRuleta() {
-    const total = premios.length;
-    const angulo = (2 * Math.PI) / total;
-
-    premios.forEach((premio, i) => {
-        ctx.beginPath();
-        ctx.fillStyle = i % 2 === 0 ? "#FFD700" : "#FF4500";
-        ctx.moveTo(150, 150);
-        ctx.arc(150, 150, 150, angulo * i, angulo * (i + 1));
-        ctx.fill();
-        ctx.fillStyle = "#000";
-        ctx.font = "14px Arial";
-        ctx.fillText(premio.texto, 100, 50 + i * 30);
-    });
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-image: url("https://cdn.pixabay.com/photo/2016/03/28/09/54/fireworks-1285269_1280.jpg");
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
 }
 
-// Girar la ruleta
-function girarRuleta() {
-    if (fondoMensual <= 0) {
-        alert("El fondo mensual ha sido agotado.");
-        return;
-    }
-
-    const premioIndex = Math.floor(Math.random() * premios.length);
-    const premio = premios[premioIndex];
-
-    setTimeout(() => {
-        alert(`Has ganado: ${premio.texto}`);
-
-        if (premio.valor > 0) {
-            let nombre = prompt("Ingresa tu nombre:");
-            if (nombre) {
-                let ganador = ganadores.find(g => g.nombre === nombre);
-                if (ganador) {
-                    ganador.totalGanado += premio.valor;
-                } else {
-                    ganadores.push({ nombre, totalGanado: premio.valor });
-                }
-                fondoMensual -= premio.valor;
-                guardarGanadores();
-                mostrarGanadores();
-            }
-        }
-    }, 3000);
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: rgba(124, 174, 254, 0.7);
+  border: 3mm solid gold;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  color: #333;
 }
 
-function guardarGanadores() {
-    localStorage.setItem('ganadores', JSON.stringify(ganadores));
+h1 {
+  color: white;
+  text-shadow: 2px 2px 4px black;
 }
 
-function mostrarGanadores() {
-    ganadoresList.innerHTML = "";
-    ganadores.forEach(g => {
-        let div = document.createElement("div");
-        div.textContent = `${g.nombre}: ${g.totalGanado} pesos`;
-        ganadoresList.appendChild(div);
-    });
+.roulette-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
-girarBtn.addEventListener("click", girarRuleta);
-dibujarRuleta();
-mostrarGanadores();
+#roulette {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 10px solid gold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+  transform-origin: center;
+  transition: transform 7s ease-out;
+}
+
+.needle {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 50px;
+  background: red;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+#spinButton {
+  background-color: #333;
+  color: white;
+  border: 2px solid gold;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 20px;
+}
+
+#spinButton:active {
+  background-color: green;
+  color: black;
+}
+
+/* Animación de confeti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: gold;
+  opacity: 0.7;
+  border-radius: 50%;
+  animation: fall 2s linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Mensaje de resultado */
+#result {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid gold;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.result-lost {
+  color: red;
+}
+
+.result-won {
+  color: green;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  #roulette {
+    width: 250px;
+    height: 250px;
+  }
+}
