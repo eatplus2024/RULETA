@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruleta de bonos redimibles DeliPlan</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ruleta de bonos redimibles DeliPlan</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Iconos de FontAwesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="main-container">
-        <h1>Ruleta de bonos redimibles DeliPlan</h1>
-        <p>Gira la ruleta y gana bonos en efectivo para redimir en tus compras.</p>
-
-        <div class="roulette-container">
-            <div class="wheel">
-                <canvas id="canvas" width="500" height="500"></canvas>
-            </div>
-            <div class="pointer"></div>
-        </div>
-        
-        <button id="spinButton">Jugar</button>
-        
-        <h2>Historial de Ganadores</h2>
-        <ul id="winnersList"></ul>
+  <div class="main-container">
+    <h1>Ruleta de bonos redimibles DeliPlan</h1>
+    <p>Gira la ruleta y gana bonos en efectivo para redimir en tus compras.</p>
+    
+    <!-- Contenedor de la ruleta y la flecha -->
+    <div class="ruleta-container">
+      <!-- Flecha / Puntero -->
+      <div class="pointer"></div>
+      <!-- Canvas de la ruleta -->
+      <canvas id="ruleta" width="500" height="500"></canvas>
     </div>
+    
+    <!-- Botón para girar la ruleta -->
+    <button id="jugarBtn">Jugar</button>
 
-    <script src="script.js"></script>
+    <!-- Historial de ganadores -->
+    <h2>Historial de Ganadores</h2>
+    <div class="glass-box">
+      <ul id="historialGanadores"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
