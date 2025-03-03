@@ -1,93 +1,107 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const spinButton = document.getElementById("spinButton");
-const winnersList = document.getElementById("winnersList");
-
-const prizes = [
-    { text: "20,000", value: 20000 },
-    { text: "10,000", value: 10000 },
-    { text: "5,000", value: 5000 },
-    { text: "2,000", value: 2000 },
-    { text: "1,000", value: 1000 },
-    { text: "Vuelve mañana", value: 0 }
-];
-
-let angle = 0;
-let spinning = false;
-
-function drawWheel() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = canvas.width / 2;
-    const numSegments = prizes.length;
-    const anglePerSegment = (2 * Math.PI) / numSegments;
-
-    for (let i = 0; i < numSegments; i++) {
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, anglePerSegment * i, anglePerSegment * (i + 1));
-        ctx.fillStyle = i % 2 === 0 ? "#ffcc00" : "#ff5733";
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(anglePerSegment * i + anglePerSegment / 2);
-        ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
-        ctx.fillText(prizes[i].text, radius * 0.7, 10);
-        ctx.restore();
-    }
+/* --- Estilos generales --- */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #222;
+  color: #fff;
+  margin: 0;
+  padding: 0;
 }
 
-function spinWheel() {
-    if (spinning) return;
-    spinning = true;
-
-    let spins = Math.floor(Math.random() * 10) + 5;
-    let finalAngle = angle + spins * 360 + Math.random() * 360;
-    
-    let animationFrame;
-    let currentAngle = angle;
-    let speed = 20;
-
-    function animate() {
-        if (speed > 0.1) {
-            currentAngle += speed;
-            speed *= 0.97;
-            angle = currentAngle % 360;
-            drawWheel();
-            animationFrame = requestAnimationFrame(animate);
-        } else {
-            cancelAnimationFrame(animationFrame);
-            determinePrize();
-            spinning = false;
-        }
-    }
-
-    animate();
+.main-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-function determinePrize() {
-    const numSegments = prizes.length;
-    const anglePerSegment = 360 / numSegments;
-    const normalizedAngle = (360 - (angle % 360)) % 360;
-    const index = Math.floor(normalizedAngle / anglePerSegment);
-    const prize = prizes[index];
-
-    if (prize.value > 0) {
-        alert(`¡Felicidades! Has ganado ${prize.text} pesos`);
-        addWinner(prize.text);
-    } else {
-        alert("Hoy no ganaste, pero mañana tendrás una nueva oportunidad. ¡Te esperamos mañana!");
-    }
+h1 {
+  margin-bottom: 10px;
 }
 
-function addWinner(amount) {
-    const li = document.createElement("li");
-    li.textContent = `Ganaste: ${amount} pesos`;
-    winnersList.appendChild(li);
+/* --- Contenedor de la ruleta --- */
+.ruleta-container {
+  position: relative;
+  display: inline-block;
+  margin: 20px 0;
 }
 
-spinButton.addEventListener("click", spinWheel);
-drawWheel();
+/* --- Canvas de la ruleta --- */
+#ruleta {
+  border: 8px solid gold;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+/* --- Flecha / Puntero --- */
+.pointer {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 25px solid red;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* --- Botón Jugar --- */
+#jugarBtn {
+  background-color: gold;
+  color: #000;
+  font-size: 18px;
+  padding: 10px 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+#jugarBtn:hover {
+  background-color: #ffcc00;
+}
+
+/* --- Caja de ganadores (Glass) --- */
+.glass-box {
+  margin: 20px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid gold;
+  border-radius: 10px;
+  max-width: 500px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* --- Lista de ganadores --- */
+#historialGanadores {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#historialGanadores li {
+  background: #444;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  text-align: left;
+}
+
+/* Responsivo */
+@media screen and (max-width: 600px) {
+  #ruleta {
+    width: 300px;
+    height: 300px;
+  }
+
+  .pointer {
+    left: 50%;
+  }
+}
