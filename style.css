@@ -1,54 +1,60 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-}
+document.addEventListener("DOMContentLoaded", function () {
+  const spinButton = document.getElementById("spinButton");
+  const roulette = document.getElementById("roulette");
+  const resultDisplay = document.getElementById("result");
 
-.main-container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+  let isSpinning = false;
+  let totalFunds = 100000; // Fondos mensuales disponibles
+  let prizes = [
+    { amount: 20000, text: "20,000 pesos" },
+    { amount: 10000, text: "10,000 pesos" },
+    { amount: 5000, text: "5,000 pesos" },
+    { amount: 2000, text: "2,000 pesos" },
+    { amount: 1000, text: "1,000 pesos" },
+    { amount: 0, text: "Vuelve mañana 😌" }
+  ];
 
-h1 {
-    color: #333;
-}
+  spinButton.addEventListener("click", function () {
+    if (isSpinning) return;
+    isSpinning = true;
 
-.ruleta-container {
-    position: relative;
-    margin: 20px auto;
-}
+    let randomIndex = Math.floor(Math.random() * prizes.length);
+    let selectedPrize = prizes[randomIndex];
 
-canvas {
-    border: 5px solid gold;
-    border-radius: 50%;
-    background: white;
-}
+    // Si el premio excede los fondos disponibles, elegir otro
+    while (selectedPrize.amount > totalFunds && selectedPrize.amount !== 0) {
+      randomIndex = Math.floor(Math.random() * prizes.length);
+      selectedPrize = prizes[randomIndex];
+    }
 
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+    // Rotación aleatoria entre 360 y 1440 grados
+    let randomRotation = 3600 + randomIndex * 60;
+    roulette.style.transform = `rotate(${randomRotation}deg)`;
 
-button:hover {
-    background-color: #0056b3;
-}
+    setTimeout(() => {
+      if (selectedPrize.amount > 0) {
+        totalFunds -= selectedPrize.amount;
+        showCelebration();
+        resultDisplay.textContent = `¡Felicidades! Has ganado ${selectedPrize.text}! 🎉`;
+        resultDisplay.classList.add("result-won");
+      } else {
+        resultDisplay.textContent = selectedPrize.text;
+        resultDisplay.classList.add("result-lost");
+      }
 
-#ganadoresList {
-    margin-top: 20px;
-    padding: 10px;
-    background: #eee;
-    border-radius: 5px;
-    text-align: left;
-}
+      isSpinning = false;
+    }, 7000);
+  });
+
+  function showCelebration() {
+    for (let i = 0; i < 50; i++) {
+      let confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      confetti.style.left = `${Math.random() * 100}vw`;
+      confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      document.body.appendChild(confetti);
+
+      setTimeout(() => confetti.remove(), 5000);
+    }
+  }
+});
