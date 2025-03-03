@@ -1,60 +1,121 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const spinButton = document.getElementById("spinButton");
-  const roulette = document.getElementById("roulette");
-  const resultDisplay = document.getElementById("result");
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #222;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
 
-  let isSpinning = false;
-  let totalFunds = 100000; // Fondos mensuales disponibles
-  let prizes = [
-    { amount: 20000, text: "20,000 pesos" },
-    { amount: 10000, text: "10,000 pesos" },
-    { amount: 5000, text: "5,000 pesos" },
-    { amount: 2000, text: "2,000 pesos" },
-    { amount: 1000, text: "1,000 pesos" },
-    { amount: 0, text: "Vuelve mañana 😌" }
-  ];
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
 
-  spinButton.addEventListener("click", function () {
-    if (isSpinning) return;
-    isSpinning = true;
+h1 {
+  font-size: 24px;
+  text-shadow: 2px 2px 4px black;
+}
 
-    let randomIndex = Math.floor(Math.random() * prizes.length);
-    let selectedPrize = prizes[randomIndex];
+.roulette-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
-    // Si el premio excede los fondos disponibles, elegir otro
-    while (selectedPrize.amount > totalFunds && selectedPrize.amount !== 0) {
-      randomIndex = Math.floor(Math.random() * prizes.length);
-      selectedPrize = prizes[randomIndex];
-    }
+/* Ruleta con efecto 3D */
+#roulette {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 10px solid gold;
+  background: radial-gradient(circle, #ffcc00, #ff6600);
+  box-shadow: 0 8px 20px rgba(255, 165, 0, 0.7);
+  position: relative;
+  transform-origin: center;
+  transition: transform 7s ease-out;
+}
 
-    // Rotación aleatoria entre 360 y 1440 grados
-    let randomRotation = 3600 + randomIndex * 60;
-    roulette.style.transform = `rotate(${randomRotation}deg)`;
+/* Aguja que indica la posición */
+.needle {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 50px;
+  background: red;
+  border-radius: 5px;
+  z-index: 10;
+}
 
-    setTimeout(() => {
-      if (selectedPrize.amount > 0) {
-        totalFunds -= selectedPrize.amount;
-        showCelebration();
-        resultDisplay.textContent = `¡Felicidades! Has ganado ${selectedPrize.text}! 🎉`;
-        resultDisplay.classList.add("result-won");
-      } else {
-        resultDisplay.textContent = selectedPrize.text;
-        resultDisplay.classList.add("result-lost");
-      }
+#spinButton {
+  background-color: gold;
+  color: black;
+  border: 2px solid #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 20px;
+}
 
-      isSpinning = false;
-    }, 7000);
-  });
+#spinButton:hover {
+  background-color: #ffcc00;
+}
 
-  function showCelebration() {
-    for (let i = 0; i < 50; i++) {
-      let confetti = document.createElement("div");
-      confetti.classList.add("confetti");
-      confetti.style.left = `${Math.random() * 100}vw`;
-      confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
-      document.body.appendChild(confetti);
+#result {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: black;
+}
 
-      setTimeout(() => confetti.remove(), 5000);
-    }
+.result-lost {
+  color: red;
+}
+
+.result-won {
+  color: green;
+}
+
+/* Animación de confeti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: gold;
+  opacity: 0.7;
+  border-radius: 50%;
+  animation: fall 2s linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0);
   }
-});
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  #roulette {
+    width: 250px;
+    height: 250px;
+  }
+}
