@@ -5,22 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ruleta de bonos redimibles DeliPlan</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Iconos de FontAwesome -->
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="main-container">
     <h1>Ruleta de bonos redimibles DeliPlan</h1>
     <p>Gira la ruleta y gana bonos en efectivo para redimir en tus compras.</p>
-    
-    <!-- Contenedor de la ruleta y la flecha -->
+
+    <!-- Campo para ingresar el nombre -->
+    <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre" />
+
+    <!-- Contenedor de la ruleta y la pista -->
     <div class="ruleta-container">
-      <!-- Flecha / Puntero -->
-      <div class="pointer"></div>
+      <!-- Pista del automóvil -->
+      <div class="pista"></div>
+      <!-- Automóvil rojo -->
+      <div id="auto"></div>
       <!-- Canvas de la ruleta -->
       <canvas id="ruleta" width="500" height="500"></canvas>
     </div>
-    
+
     <!-- Botón para girar la ruleta -->
     <button id="jugarBtn">Jugar</button>
 
