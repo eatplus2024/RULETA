@@ -1,135 +1,101 @@
-// Obtenemos los elementos del DOM
-const canvas = document.getElementById("ruleta");
-const ctx = canvas.getContext("2d");
-const jugarBtn = document.getElementById("jugarBtn");
-const historial = document.getElementById("historialGanadores");
+document.addEventListener("DOMContentLoaded", function () {
+  const canvas = document.getElementById("ruleta");
+  const ctx = canvas.getContext("2d");
+  const jugarBtn = document.getElementById("jugarBtn");
+  const nombreUsuario = document.getElementById("nombreUsuario");
+  const historialGanadores = document.getElementById("historialGanadores");
+  const auto = document.getElementById("auto");
 
-// Datos de los premios
-// (puedes agregar o quitar según necesites)
-const premios = [
-  { texto: "20,000", valor: 20000 },
-  { texto: "10,000", valor: 10000 },
-  { texto: "5,000", valor: 5000 },
-  { texto: "2,000", valor: 2000 },
-  { texto: "1,000", valor: 1000 },
-  { texto: "Vuelve mañana", valor: 0 }
-];
+  const premios = ["$10", "$50", "$100", "GRATIS", "$200", "$500", "SORPRESA", "NADA"];
+  const anguloPorPremio = (2 * Math.PI) / premios.length;
+  let anguloActual = 0;
+  let girando = false;
 
-// Ángulo inicial de la ruleta
-let anguloActual = 0;
-// Controla si está girando
-let girando = false;
-
-// Función para dibujar la ruleta en el canvas
-function dibujarRuleta() {
-  // Limpiar el canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Calculamos algunos valores
-  const centroX = canvas.width / 2;
-  const centroY = canvas.height / 2;
-  const radio = Math.min(centroX, centroY);
-  const segmentos = premios.length;
-  const anguloPorSegmento = (2 * Math.PI) / segmentos;
-
-  // Guardar el estado del contexto y trasladar/rotar
-  ctx.save();
-  ctx.translate(centroX, centroY);
-  ctx.rotate((anguloActual * Math.PI) / 180);
-  ctx.translate(-centroX, -centroY);
-
-  // Dibujar cada segmento
-  for (let i = 0; i < segmentos; i++) {
-    // Ángulo inicial y final del segmento
-    const angInicio = anguloPorSegmento * i;
-    const angFin = angInicio + anguloPorSegmento;
-
-    // Establecer color del segmento
-    ctx.beginPath();
-    ctx.moveTo(centroX, centroY);
-    ctx.arc(centroX, centroY, radio, angInicio, angFin);
-    ctx.fillStyle = i % 2 === 0 ? "#ffcc00" : "#ff5733";
-    ctx.fill();
-    ctx.strokeStyle = "#000";
-    ctx.stroke();
-
-    // Dibujar texto
-    ctx.save();
-    ctx.translate(centroX, centroY);
-    ctx.rotate(angInicio + anguloPorSegmento / 2);
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 20px Arial";
-    ctx.fillText(premios[i].texto, radio - 10, 10);
-    ctx.restore();
-  }
-
-  // Restaurar el contexto original
-  ctx.restore();
-}
-
-// Función para iniciar el giro de la ruleta
-function girarRuleta() {
-  if (girando) return;
-  girando = true;
-
-  // Calculamos un giro aleatorio
-  // De 3 a 6 vueltas completas (cada vuelta = 360°)
-  const vueltas = Math.floor(Math.random() * 3) + 3;
-  // Ángulo adicional aleatorio entre 0 y 360
-  const anguloExtra = Math.floor(Math.random() * 360);
-  // Ángulo final
-  const anguloFinal = anguloActual + vueltas * 360 + anguloExtra;
-
-  // Velocidad inicial (grados por frame)
-  let velocidad = 20;
-  // Animación con requestAnimationFrame
-  function animar() {
-    if (anguloActual < anguloFinal) {
-      // Sumar la velocidad al ángulo actual
-      anguloActual += velocidad;
-      // Ir reduciendo la velocidad para un efecto 'ease-out'
-      if (velocidad > 0.2) {
-        velocidad *= 0.98; // Ajusta para más o menos inercia
-      }
-      dibujarRuleta();
-      requestAnimationFrame(animar);
-    } else {
-      // Se alcanzó el ángulo final (o muy cerca)
-      anguloActual = anguloFinal;
-      dibujarRuleta();
-      girando = false;
-      mostrarResultado();
+  function dibujarRuleta() {
+    for (let i = 0; i < premios.length; i++) {
+      ctx.beginPath();
+      ctx.moveTo(250, 250);
+      ctx.arc(250, 250, 250, anguloActual + i * anguloPorPremio, anguloActual + (i + 1) * anguloPorPremio);
+      ctx.closePath();
+      ctx.fillStyle = i % 2 === 0 ? "#FFD700" : "#FF4500";
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#000";
+      ctx.font = "20px Arial";
+      ctx.fillText(premios[i], 180 + 180 * Math.cos(anguloActual + (i + 0.5) * anguloPorPremio),
+                   250 + 180 * Math.sin(anguloActual + (i + 0.5) * anguloPorPremio));
     }
   }
-  animar();
-}
 
-// Función para determinar el resultado según el ángulo final
-function mostrarResultado() {
-  // Normalizamos el ángulo al rango [0, 360)
-  const angNormalizado = (360 - (anguloActual % 360)) % 360;
-  // Calculamos el tamaño de cada segmento en grados
-  const tamSegmento = 360 / premios.length;
-  // Identificamos el índice del premio
-  const indice = Math.floor(angNormalizado / tamSegmento);
-  const premio = premios[indice];
+  function animarRuleta(callback) {
+    let duracion = 8000; // Reducido a 8 segundos
+    let tiempoInicio = null;
+    let velocidadInicial = 0.2 + Math.random() * 0.2;
+    let frenado = velocidadInicial / duracion;
 
-  if (premio.valor > 0) {
-    alert(`¡Felicidades! Has ganado ${premio.texto} pesos`);
-    agregarGanador(premio.texto);
-  } else {
-    alert("Hoy no ganaste, pero mañana tendrás una nueva oportunidad. ¡Te esperamos mañana!");
+    function animacionRuleta(timestamp) {
+      if (!tiempoInicio) tiempoInicio = timestamp;
+      let progreso = timestamp - tiempoInicio;
+      let velocidad = Math.max(velocidadInicial - frenado * progreso, 0);
+      anguloActual += velocidad;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dibujarRuleta();
+
+      if (velocidad > 0) {
+        requestAnimationFrame(animacionRuleta);
+        moverAuto(velocidad);
+      } else {
+        let premioIndex = Math.floor(((anguloActual % (2 * Math.PI)) / (2 * Math.PI)) * premios.length);
+        let premioGanado = premios[premios.length - 1 - premioIndex];
+        callback(premioGanado);
+      }
+    }
+
+    requestAnimationFrame(animacionRuleta);
   }
-}
 
-// Función para agregar ganador al historial
-function agregarGanador(monto) {
-  const li = document.createElement("li");
-  li.textContent = `Ganaste: ${monto} pesos`;
-  historial.appendChild(li);
-}
+  function moverAuto(velocidad) {
+    let radio = 250;
+    let centroX = 250;
+    let centroY = 250;
+    let posX = centroX + radio * Math.cos(anguloActual) - 20;
+    let posY = centroY + radio * Math.sin(anguloActual) - 10;
+    auto.style.transform = `translate(${posX}px, ${posY}px)`;
+  }
 
-// Eventos
-jugarBtn.addEventListener("click", girarRuleta);
-dibujarRuleta(); // Dibujamos la ruleta al cargar
+  function mostrarGanador(premio) {
+    if (!nombreUsuario.value) {
+      alert("Por favor, ingresa tu nombre antes de jugar.");
+      return;
+    }
+
+    let nuevoGanador = document.createElement("li");
+    nuevoGanador.textContent = `${nombreUsuario.value} ganó: ${premio}`;
+    historialGanadores.appendChild(nuevoGanador);
+    
+    animarConfeti();
+  }
+
+  function animarConfeti() {
+    for (let i = 0; i < 50; i++) {
+      let confeti = document.createElement("div");
+      confeti.classList.add("confeti");
+      confeti.style.left = `${Math.random() * 100}vw`;
+      confeti.style.backgroundColor = ["red", "yellow", "blue", "green", "orange"][Math.floor(Math.random() * 5)];
+      confeti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+      document.body.appendChild(confeti);
+      setTimeout(() => confeti.remove(), 3000);
+    }
+  }
+
+  jugarBtn.addEventListener("click", function () {
+    if (girando) return;
+    girando = true;
+    animarRuleta((premio) => {
+      girando = false;
+      mostrarGanador(premio);
+    });
+  });
+
+  dibujarRuleta();
+});
