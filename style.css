@@ -8,7 +8,7 @@ body {
 }
 
 .main-container {
-  max-width: 90%;
+  max-width: 700px;
   margin: 40px auto;
   background: rgba(255, 255, 255, 0.07);
   border-radius: 15px;
@@ -36,9 +36,8 @@ body {
   border-radius: 5px;
 }
 
-.nombre-container button.verde {
+.nombre-container button:active {
   background-color: green;
-  color: white;
 }
 
 .ruleta-container {
@@ -60,7 +59,7 @@ body {
   border-right: 15px solid transparent;
   border-bottom: 25px solid red;
   position: absolute;
-  top: -20px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -82,7 +81,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Efectos de confeti */
+/* Efecto de confeti */
 .confetti {
   position: absolute;
   width: 10px;
