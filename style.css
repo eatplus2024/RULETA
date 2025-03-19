@@ -1,4 +1,3 @@
-/* --- Estilos generales --- */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -17,75 +16,52 @@ body {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-h1 {
-  margin-bottom: 10px;
+/* Contenedor del nombre */
+.nombre-container {
+  margin-bottom: 20px;
 }
 
-/* --- Campo de nombre --- */
-#nombreUsuario {
+.nombre-container input {
   padding: 10px;
   font-size: 16px;
-  margin-bottom: 10px;
   border-radius: 5px;
-  border: 1px solid #ddd;
-  width: 80%;
+  border: none;
 }
 
-/* --- Contenedor de la ruleta --- */
+.nombre-container button {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: gold;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
 .ruleta-container {
   position: relative;
   display: inline-block;
   margin: 20px 0;
 }
 
-/* --- Pista del automóvil --- */
-.pista {
-  position: absolute;
-  width: 520px;
-  height: 520px;
-  border: 10px solid gray;
-  border-radius: 50%;
-  top: -10px;
-  left: -10px;
-}
-
-/* --- Automóvil rojo --- */
-#auto {
-  width: 40px;
-  height: 20px;
-  background: red;
-  position: absolute;
-  top: 240px;
-  left: 480px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
-}
-
-/* --- Efecto de humo y fuego --- */
-@keyframes humoFuego {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(2); }
-}
-
-.humo-fuego {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: orange;
-  border-radius: 50%;
-  top: 50%;
-  left: -10px;
-  animation: humoFuego 0.5s infinite;
-}
-
-/* --- Canvas de la ruleta --- */
 #ruleta {
   border: 8px solid gold;
   border-radius: 50%;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
-/* --- Botón Jugar --- */
+.pointer {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 25px solid red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  z-index: 2;
+}
+
 #jugarBtn {
   background-color: gold;
   color: #000;
@@ -95,61 +71,24 @@ h1 {
   cursor: pointer;
   border-radius: 8px;
   font-weight: bold;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  transition: background-color 0.3s ease;
 }
 
-#jugarBtn:hover {
-  background-color: #ffcc00;
+#jugarBtn:disabled {
+  background-color: gray;
+  cursor: not-allowed;
 }
 
-/* --- Caja de ganadores (Glass) --- */
-.glass-box {
-  margin: 20px auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid gold;
-  border-radius: 10px;
-  max-width: 500px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-}
-
-/* --- Lista de ganadores --- */
-#historialGanadores {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-#historialGanadores li {
-  background: #444;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-  color: #fff;
-  text-align: left;
-}
-
-/* --- Animación de confeti y luces para ganador --- */
-@keyframes confeti {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
-
-.confeti {
-  position: fixed;
+/* Animación de confeti */
+.confetti {
+  position: absolute;
   width: 10px;
   height: 10px;
-  background: yellow;
-  top: 0;
-  left: 50%;
-  animation: confeti 3s linear infinite;
+  background-color: gold;
+  opacity: 0.8;
+  animation: confettiFall 3s linear infinite;
 }
 
-/* Responsivo */
-@media screen and (max-width: 600px) {
-  #ruleta {
-    width: 300px;
-    height: 300px;
-  }
+@keyframes confettiFall {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(600px) rotate(360deg); }
 }
