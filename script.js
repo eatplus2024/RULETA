@@ -3,7 +3,6 @@ const ctx = canvas.getContext("2d");
 const jugarBtn = document.getElementById("jugarBtn");
 const nombreInput = document.getElementById("nombreUsuario");
 const nombreBtn = document.getElementById("nombreBtn");
-const historial = document.getElementById("historialGanadores");
 
 let nombreUsuario = "";
 let anguloActual = 0;
@@ -34,12 +33,14 @@ function dibujarRuleta() {
     ctx.fill();
     ctx.stroke();
 
+    // Dibujar texto correctamente alineado
     ctx.save();
     ctx.translate(centroX, centroY);
-    ctx.rotate(anguloPorSegmento * i + anguloPorSegmento / 2);
+    ctx.rotate(anguloPorSegmento * i + anguloPorSegmento / 2 + Math.PI / 2); // Ajustar ángulo
     ctx.fillStyle = "#fff";
     ctx.font = "bold 20px Arial";
-    ctx.fillText(premios[i].texto, radio - 50, 10);
+    ctx.textAlign = "right";
+    ctx.fillText(premios[i].texto, radio - 20, 10);
     ctx.restore();
   }
 }
@@ -47,6 +48,7 @@ function dibujarRuleta() {
 function girarRuleta() {
   if (girando) return;
   girando = true;
+  jugarBtn.disabled = true;
 
   let tiempo = 8000;
   let anguloFinal = anguloActual + Math.random() * 360 + 1080;
@@ -59,9 +61,10 @@ function girarRuleta() {
       dibujarRuleta();
       requestAnimationFrame(animar);
     } else {
-      anguloActual = anguloFinal;
+      anguloActual = anguloFinal % 360;
       mostrarResultado();
       girando = false;
+      jugarBtn.disabled = false;
     }
   }
   animar();
