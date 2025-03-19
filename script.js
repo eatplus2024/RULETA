@@ -4,7 +4,6 @@ const jugarBtn = document.getElementById("jugarBtn");
 const nombreInput = document.getElementById("nombreUsuario");
 const nombreBtn = document.getElementById("nombreBtn");
 const historial = document.getElementById("historialGanadores");
-const confettiContainer = document.getElementById("confetti-container");
 
 let nombreUsuario = "";
 let anguloActual = 0;
@@ -33,8 +32,15 @@ function dibujarRuleta() {
     ctx.arc(centroX, centroY, radio, anguloPorSegmento * i, anguloPorSegmento * (i + 1));
     ctx.fillStyle = i % 2 === 0 ? "#ffcc00" : "#ff5733";
     ctx.fill();
-    ctx.strokeStyle = "#000";
     ctx.stroke();
+
+    ctx.save();
+    ctx.translate(centroX, centroY);
+    ctx.rotate(anguloPorSegmento * i + anguloPorSegmento / 2);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 20px Arial";
+    ctx.fillText(premios[i].texto, radio - 50, 10);
+    ctx.restore();
   }
 }
 
@@ -42,13 +48,13 @@ function girarRuleta() {
   if (girando) return;
   girando = true;
 
-  let duracion = 8000;
-  let anguloFinal = anguloActual + 1080 + Math.random() * 360;
+  let tiempo = 8000;
+  let anguloFinal = anguloActual + Math.random() * 360 + 1080;
   let inicio = Date.now();
 
   function animar() {
     let tiempoPasado = Date.now() - inicio;
-    if (tiempoPasado < duracion) {
+    if (tiempoPasado < tiempo) {
       anguloActual += (anguloFinal - anguloActual) * 0.05;
       dibujarRuleta();
       requestAnimationFrame(animar);
@@ -65,31 +71,12 @@ function mostrarResultado() {
   let indice = Math.floor((anguloActual % 360) / (360 / premios.length));
   let premio = premios[indice];
 
-  if (premio.valor === 0) {
-    alert(`Hoy no has ganado, pero vuelve mañana, todos los días hay premios`);
-  } else {
-    alert(`${nombreUsuario}, ¡Ganaste ${premio.texto} pesos! Vuelve mañana y sigue ganando, todos los días hay premios`);
-    lanzarConfeti();
-  }
-}
-
-function lanzarConfeti() {
-  for (let i = 0; i < 100; i++) {
-    let confetti = document.createElement("div");
-    confetti.className = "confetti";
-    confetti.style.left = Math.random() * 100 + "vw";
-    confettiContainer.appendChild(confetti);
-  }
+  alert(premio.valor > 0 ? `¡Ganaste ${premio.texto} pesos! Vuelve mañana y sigue ganando.` : "Hoy no has ganado, pero vuelve mañana.");
 }
 
 nombreBtn.addEventListener("click", () => {
   nombreUsuario = nombreInput.value;
-  if (nombreUsuario) {
-    jugarBtn.disabled = false;
-    nombreInput.style.opacity = "0.5";
-    nombreInput.disabled = true;
-    nombreBtn.classList.add("verde");
-  }
+  if (nombreUsuario) jugarBtn.disabled = false;
 });
 
 jugarBtn.addEventListener("click", girarRuleta);
