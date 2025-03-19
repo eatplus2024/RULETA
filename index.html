@@ -3,32 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ruleta de bonos redimibles DeliPlan</title>
+  <title>Ruleta de Bonos DeliPlan</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="main-container">
-    <h1>Ruleta de bonos redimibles DeliPlan</h1>
+    <h1>Ruleta de Bonos DeliPlan</h1>
     <p>Gira la ruleta y gana bonos en efectivo para redimir en tus compras.</p>
 
     <!-- Campo para ingresar el nombre -->
-    <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre" />
+    <div class="nombre-container">
+      <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre" />
+      <button id="nombreBtn">Listo</button>
+    </div>
 
-    <!-- Contenedor de la ruleta y la pista -->
+    <!-- Contenedor de la ruleta -->
     <div class="ruleta-container">
-      <!-- Pista del automóvil -->
-      <div class="pista"></div>
-      <!-- Automóvil rojo -->
-      <div id="auto"></div>
-      <!-- Canvas de la ruleta -->
+      <div class="pointer"></div> <!-- Aguja -->
       <canvas id="ruleta" width="500" height="500"></canvas>
     </div>
 
-    <!-- Botón para girar la ruleta -->
-    <button id="jugarBtn">Jugar</button>
+    <button id="jugarBtn" disabled>Jugar</button>
 
-    <!-- Historial de ganadores -->
     <h2>Historial de Ganadores</h2>
     <div class="glass-box">
       <ul id="historialGanadores"></ul>
