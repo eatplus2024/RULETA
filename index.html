@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ruleta de Bonos DeliPlan</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="main-container">
     <h1>Ruleta de Bonos DeliPlan</h1>
     <p>Gira la ruleta y gana bonos en efectivo para redimir en tus compras.</p>
 
-    <!-- Campo para ingresar el nombre -->
     <div class="nombre-container">
-      <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre" />
+      <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
       <button id="nombreBtn">Listo</button>
     </div>
 
-    <!-- Contenedor de la ruleta -->
     <div class="ruleta-container">
       <div class="pointer"></div> <!-- Aguja -->
       <canvas id="ruleta" width="500" height="500"></canvas>
@@ -30,6 +28,8 @@
       <ul id="historialGanadores"></ul>
     </div>
   </div>
+
+  <div id="confetti-container"></div>
 
   <script src="script.js"></script>
 </body>
