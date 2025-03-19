@@ -21,6 +21,16 @@ h1 {
   margin-bottom: 10px;
 }
 
+/* --- Campo de nombre --- */
+#nombreUsuario {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 80%;
+}
+
 /* --- Contenedor de la ruleta --- */
 .ruleta-container {
   position: relative;
@@ -28,25 +38,51 @@ h1 {
   margin: 20px 0;
 }
 
+/* --- Pista del automóvil --- */
+.pista {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border: 10px solid gray;
+  border-radius: 50%;
+  top: -10px;
+  left: -10px;
+}
+
+/* --- Automóvil rojo --- */
+#auto {
+  width: 40px;
+  height: 20px;
+  background: red;
+  position: absolute;
+  top: 240px;
+  left: 480px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+}
+
+/* --- Efecto de humo y fuego --- */
+@keyframes humoFuego {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+.humo-fuego {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: orange;
+  border-radius: 50%;
+  top: 50%;
+  left: -10px;
+  animation: humoFuego 0.5s infinite;
+}
+
 /* --- Canvas de la ruleta --- */
 #ruleta {
   border: 8px solid gold;
   border-radius: 50%;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-}
-
-/* --- Flecha / Puntero --- */
-.pointer {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 25px solid red;
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
 }
 
 /* --- Botón Jugar --- */
@@ -94,14 +130,26 @@ h1 {
   text-align: left;
 }
 
+/* --- Animación de confeti y luces para ganador --- */
+@keyframes confeti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.confeti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: yellow;
+  top: 0;
+  left: 50%;
+  animation: confeti 3s linear infinite;
+}
+
 /* Responsivo */
 @media screen and (max-width: 600px) {
   #ruleta {
     width: 300px;
     height: 300px;
-  }
-
-  .pointer {
-    left: 50%;
   }
 }
